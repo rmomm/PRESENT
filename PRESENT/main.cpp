@@ -11,5 +11,14 @@ int main() {
     cout << enc << endl;
     cout << dec << endl;
 
+    cout << endl;
+
+    uint64_t perm = pLayer(test);
+    uint64_t inv = invpLayer(perm);
+
+    cout << hex << test << endl;
+    cout << perm << endl;
+    cout << inv << endl;
+
     return 0;
 }
