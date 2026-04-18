@@ -19,3 +19,4 @@ uint64_t encrypt(uint64_t state, uint64_t addRoundKeys[32]);
 uint64_t decrypt(uint64_t state, uint64_t addRoundKeys[32]);
 
 vector<uint64_t> generateRoundKeys80(bitset<80> key);
+vector<uint64_t> generateRoundKeys128(bitset<128> key);
