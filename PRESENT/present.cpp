@@ -84,14 +84,19 @@ uint64_t invpLayer(uint64_t state) {
 
 
 uint64_t encrypt(uint64_t state, uint64_t addRoundKeys[32]) {
-
     for (int i = 0; i < 31; i++) {
-        state ^= addRoundKeys[i];     
-        state = sBoxLayer(state);   
-        state = pLayer(state);      
+        state ^= addRoundKeys[i];
+        state = sBoxLayer(state);
+        state = pLayer(state);
     }
-
     state ^= addRoundKeys[31];
-
     return state;
 }
+
+
+
+
+
+
+
+

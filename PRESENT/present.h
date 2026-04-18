@@ -14,5 +14,4 @@ uint64_t invsBoxLayer(uint64_t state);
 uint64_t pLayer(uint64_t state);
 uint64_t invpLayer(uint64_t state);
 
-uint64_t encrypt(uint64_t state, uint64_t roundKeys[32]);
-//uint64_t decrypt(uint64_t state, uint64_t roundKeys[32]);
+uint64_t encrypt(uint64_t state, uint64_t addRoundKeys[32]);
