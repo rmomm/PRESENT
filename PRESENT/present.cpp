@@ -144,3 +144,46 @@ vector<uint64_t> generateRoundKeys80(bitset<80> key) {
     return roundKeys;
 }
 
+vector<uint64_t> generateRoundKeys128(bitset<128> key) {
+    vector<uint64_t> roundKeys(32);
+
+    for (int round = 1; round <= 32; round++) {
+        uint64_t rk = 0;
+        for (int i = 127; i >= 64; i--) {
+            rk = (rk << 1) | key[i];
+        }
+        roundKeys[round - 1] = rk;
+
+        if (round == 32) break;
+
+        bitset<128> rotated;
+        for (int i = 0; i < 128; i++) {
+            rotated[(i + 61) % 128] = key[i];
+        }
+        key = rotated;
+
+        uint8_t nibble1 = 0;
+        for (int i = 0; i < 4; i++) {
+            nibble1 = (nibble1 << 1) | key[127 - i];
+        }
+        nibble1 = S[nibble1];
+        for (int i = 0; i < 4; i++) {
+            key[127 - i] = (nibble1 >> (3 - i)) & 1;
+        }
+
+        uint8_t nibble2 = 0;
+        for (int i = 0; i < 4; i++) {
+            nibble2 = (nibble2 << 1) | key[123 - i];
+        }
+        nibble2 = S[nibble2];
+        for (int i = 0; i < 4; i++) {
+            key[123 - i] = (nibble2 >> (3 - i)) & 1;
+        }
+
+        for (int i = 0; i < 5; i++) {
+            key[62 + i] = key[62 + i] ^ ((round >> i) & 1);
+        }
+    }
+
+    return roundKeys;
+}
