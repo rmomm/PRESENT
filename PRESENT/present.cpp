@@ -89,13 +89,22 @@ uint64_t encrypt(uint64_t state, uint64_t addRoundKeys[32]) {
         state = sBoxLayer(state);
         state = pLayer(state);
     }
+
     state ^= addRoundKeys[31];
     return state;
 }
 
 
+uint64_t decrypt(uint64_t state, uint64_t addRoundKeys[32]) {
+    state ^= addRoundKeys[31];
 
-
+    for (int i = 30; i >= 0; i--) {
+        state = invpLayer(state);
+        state = invsBoxLayer(state);
+        state ^= addRoundKeys[i];
+    }
+    return state;
+}
 
 
 
