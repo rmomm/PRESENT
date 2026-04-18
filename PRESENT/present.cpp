@@ -107,5 +107,40 @@ uint64_t decrypt(uint64_t state, uint64_t addRoundKeys[32]) {
 }
 
 
+vector<uint64_t> generateRoundKeys80(bitset<80> key) {
+    vector<uint64_t> roundKeys(32);
 
+    for (int round = 1; round <= 32; round++) {
+        uint64_t rk = 0;
+        for (int i = 79; i >= 16; i--) {
+            rk = (rk << 1) | key[i];
+        }
+        roundKeys[round - 1] = rk;
+
+        if (round == 32) { 
+            break; 
+        }
+
+        bitset<80> rotated;
+        for (int i = 0; i < 80; i++) {
+            rotated[(i + 61) % 80] = key[i];
+        }
+        key = rotated;
+
+        uint8_t nibble = 0;
+        for (int i = 0; i < 4; i++) {
+            nibble = (nibble << 1) | key[79 - i];
+        }
+        nibble = S[nibble];
+        for (int i = 0; i < 4; i++) {
+            key[79 - i] = (nibble >> (3 - i)) & 1;
+        }
+
+        for (int i = 0; i < 5; i++) {
+            key[15 + i] = key[15 + i] ^ ((round >> i) & 1);
+        }
+    }
+
+    return roundKeys;
+}
 
