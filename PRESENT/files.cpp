@@ -50,3 +50,43 @@ bitset<80> readKey80(const string& filename) {
 
     return key;
 }
+
+
+void encryptFile(const string& inputFile, const string& outputFile, const string& keyFile) {
+
+    auto data = readFile(inputFile);
+    auto key = readKey80(keyFile);
+
+    auto roundKeysV = generateRoundKeys80(key);
+
+    uint64_t roundKeys[32];
+    for (int i = 0; i < 32; i++) {
+        roundKeys[i] = roundKeysV[i];
+    }
+
+    auto encrypted = encryptData(data, roundKeys);
+
+    writeFile(outputFile, encrypted);
+
+    cout << "Encryption completed.\n";
+}
+
+
+void decryptFile(const string& inputFile, const string& outputFile, const string& keyFile) {
+
+    auto data = readFile(inputFile);
+    auto key = readKey80(keyFile);
+
+    auto roundKeysV = generateRoundKeys80(key);
+
+    uint64_t roundKeys[32];
+    for (int i = 0; i < 32; i++) {
+        roundKeys[i] = roundKeysV[i];
+    }
+
+    auto decrypted = decryptData(data, roundKeys);
+
+    writeFile(outputFile, decrypted);
+
+    cout << "Decryption completed.\n";
+}
