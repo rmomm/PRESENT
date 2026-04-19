@@ -1,24 +1,46 @@
-#include <iostream>
-#include "present.h"
+#include "present.h" 
+#include "files.h"
 
 int main() {
-    uint64_t test = 0x0123456789ABCDEF;
+    try {
+        int choice;
 
-    uint64_t enc = sBoxLayer(test);
-    uint64_t dec = invsBoxLayer(enc);
+        cout << " PRESENT Cipher \n";
+        cout << "1 - Encrypt file\n";
+        cout << "2 - Decrypt file\n";
+        cout << "0 - Exit\n";
+        cout << "Choice: ";
+        cin >> choice;
 
-    cout << hex << test << endl;
-    cout << enc << endl;
-    cout << dec << endl;
+        if (choice == 0) { 
+            return 0; 
+        }
 
-    cout << endl;
+        string inputFile, outputFile, keyFile;
 
-    uint64_t perm = pLayer(test);
-    uint64_t inv = invpLayer(perm);
+        cout << "Input file: ";
+        cin >> inputFile;
 
-    cout << hex << test << endl;
-    cout << perm << endl;
-    cout << inv << endl;
+        cout << "Output file: ";
+        cin >> outputFile;
+
+        cout << "Key file: ";
+        cin >> keyFile;
+
+        if (choice == 1) {
+            encryptFile(inputFile, outputFile, keyFile);
+        }
+        else if (choice == 2) {
+            decryptFile(inputFile, outputFile, keyFile);
+        }
+        else {
+           cout << "Invalid choice!\n";
+        }
+
+    }
+    catch (const exception& e) {
+        cout << "Error: " << e.what() << "\n";
+    }
 
     return 0;
 }
