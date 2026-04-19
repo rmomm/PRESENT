@@ -26,3 +26,27 @@ void writeFile(const string& filename, const vector<uint8_t>& data) {
     out.write(reinterpret_cast<const char*>(data.data()), data.size());
 }
 
+bitset<80> readKey80(const string& filename) {
+    ifstream in(filename);
+    if (!in) {
+        throw runtime_error("Cannot open key file");
+    }
+
+    string hex;
+    in >> hex;
+
+    if (hex.size() != 20) {
+        throw runtime_error("Key must be 80-bit");
+    }
+
+    bitset<80> key;
+
+    for (int i = 0; i < 20; i++) {
+        uint8_t val = std::stoi(hex.substr(i, 1), nullptr, 16);
+        for (int j = 0; j < 4; j++) {
+            key[79 - (i * 4 + j)] = (val >> (3 - j)) & 1;
+        }
+    }
+
+    return key;
+}
