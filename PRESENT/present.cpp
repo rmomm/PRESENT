@@ -187,3 +187,31 @@ vector<uint64_t> generateRoundKeys128(bitset<128> key) {
 
     return roundKeys;
 }
+
+vector<uint8_t> encryptData(const vector<uint8_t>& plain, uint64_t roundKeys[32]) {
+    vector<uint8_t> data = plain;
+
+    while (data.size() % 8 != 0) {
+        data.push_back(0);
+    }
+
+    vector<uint8_t> result;
+
+    for (size_t i = 0; i < data.size(); i += 8) {
+        uint64_t block = 0;
+
+        for (int j = 0; j < 8; j++) {
+            block = (block << 8) | data[i + j];
+        }
+
+        block = encrypt(block, roundKeys);
+
+        for (int j = 7; j >= 0; j--) {
+            result.push_back((block >> (j * 8)) & 0xFF);
+        }
+    }
+
+    return result;
+}
+
+
