@@ -215,3 +215,27 @@ vector<uint8_t> encryptData(const vector<uint8_t>& plain, uint64_t roundKeys[32]
 }
 
 
+vector<uint8_t> decryptData(const vector<uint8_t>& cipher, uint64_t roundKeys[32]) {
+
+    if (cipher.size() % 8 != 0) {
+        throw runtime_error("Ciphertext is empty");
+    }
+
+    vector<uint8_t> result;
+
+    for (size_t i = 0; i < cipher.size(); i += 8) {
+        uint64_t block = 0;
+
+        for (int j = 0; j < 8; j++) {
+            block = (block << 8) | cipher[i + j];
+        }
+
+        block = decrypt(block, roundKeys);
+
+        for (int j = 7; j >= 0; j--) {
+            result.push_back((block >> (j * 8)) & 0xFF);
+        }
+    }
+
+    return result;
+}
