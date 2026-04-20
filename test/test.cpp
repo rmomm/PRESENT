@@ -176,3 +176,47 @@ TEST(PRESENT80, DifferentKeys) {
     EXPECT_NE(c1, c2);
 }
 
+TEST(PRESENT80, ECBMode) {
+    vector<uint8_t> data = {
+        1,2,3,4,5,6,7,8,
+        9,10,11,12,13,14,15,16
+    };
+
+    bitset<80> key;
+    key.reset();
+
+    auto keys = generateRoundKeys80(key);
+
+    uint64_t rk[32];
+    for (int i = 0; i < 32; i++) {
+        rk[i] = keys[i];
+    }
+
+    auto enc = encryptData(data, rk);
+    auto dec = decryptData(enc, rk);
+
+    EXPECT_EQ(dec, data);
+}
+
+TEST(PRESENT128, MultipleBlocks) {
+    bitset<128> key;
+    key.reset();
+
+    auto keys = generateRoundKeys128(key);
+
+    uint64_t rk[32];
+    for (int i = 0; i < 32; i++) rk[i] = keys[i];
+
+    uint64_t blocks[3] = {
+        0x1111111111111111ULL,
+        0x2222222222222222ULL,
+        0x3333333333333333ULL
+    };
+
+    for (int i = 0; i < 3; i++) {
+        uint64_t c = encrypt(blocks[i], rk);
+        uint64_t d = decrypt(c, rk);
+
+        EXPECT_EQ(d, blocks[i]);
+    }
+}
