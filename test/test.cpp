@@ -48,3 +48,40 @@ TEST(PRESENT80, DecryptBack) {
     EXPECT_EQ(decrypted, plaintext);
 }
 
+TEST(PRESENT80, EncryptDecrypt) {
+    uint64_t plain = 0x123456789ABCDEF0ULL;
+
+    bitset<80> key;
+    key.reset();
+
+    auto keys = generateRoundKeys80(key);
+
+    uint64_t rk[32];
+    for (int i = 0; i < 32; i++) { 
+        rk[i] = keys[i]; 
+    }
+
+    uint64_t cipher = encrypt(plain, rk);
+    uint64_t decrypted = decrypt(cipher, rk);
+
+    EXPECT_EQ(decrypted, plain);
+}
+
+TEST(PRESENT128, EncryptDecrypt) {
+    uint64_t plain = 0xFEDCBA9876543210ULL;
+
+    bitset<128> key;
+    key.reset();
+
+    auto keys = generateRoundKeys128(key);
+
+    uint64_t rk[32];
+    for (int i = 0; i < 32; i++) { 
+        rk[i] = keys[i]; 
+    }
+
+    uint64_t cipher = encrypt(plain, rk);
+    uint64_t decrypted = decrypt(cipher, rk);
+
+    EXPECT_EQ(decrypted, plain);
+}
