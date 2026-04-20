@@ -85,3 +85,25 @@ TEST(PRESENT128, EncryptDecrypt) {
 
     EXPECT_EQ(decrypted, plain);
 }
+
+
+TEST(PRESENT80, DifferentInputs) {
+    bitset<80> key;
+    key.reset();
+
+    auto keys = generateRoundKeys80(key);
+
+    uint64_t rk[32];
+    for (int i = 0; i < 32; i++) {
+        rk[i] = keys[i]; 
+    }
+
+    uint64_t p1 = 0x0000000000000000ULL;
+    uint64_t p2 = 0xFFFFFFFFFFFFFFFFULL;
+
+    uint64_t c1 = encrypt(p1, rk);
+    uint64_t c2 = encrypt(p2, rk);
+
+    EXPECT_NE(c1, c2);
+}
+
