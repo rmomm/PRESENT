@@ -107,3 +107,26 @@ TEST(PRESENT80, DifferentInputs) {
     EXPECT_NE(c1, c2);
 }
 
+TEST(PRESENT80, DifferentKeys) {
+    uint64_t plain = 0x123456789ABCDEF0ULL;
+
+    bitset<80> key1;
+    key1.reset();
+
+    bitset<80> key2;
+    key2.set();
+
+    auto k1 = generateRoundKeys80(key1);
+    auto k2 = generateRoundKeys80(key2);
+
+    uint64_t rk1[32], rk2[32];
+    for (int i = 0; i < 32; i++) {
+        rk1[i] = k1[i];
+        rk2[i] = k2[i];
+    }
+
+    uint64_t c1 = encrypt(plain, rk1);
+    uint64_t c2 = encrypt(plain, rk2);
+
+    EXPECT_NE(c1, c2);
+}
