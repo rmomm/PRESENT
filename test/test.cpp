@@ -4,6 +4,51 @@
 
 using namespace std;
 
+TEST(PRESENT80, OfficialVector) {
+    uint64_t plain = 0x0123456789ABCDEFULL;
+
+    bitset<80> key;
+    string key_hex = "0123456789abcdef0123";
+
+    for (int i = 0; i < 80; i++) {
+        key[i] = (stoi(key_hex.substr(19 - i / 4, 1), nullptr, 16) >> (i % 4)) & 1;
+    }
+
+    auto keys = generateRoundKeys80(key);
+
+    uint64_t rk[32];
+    for (int i = 0; i < 32; i++) {
+        rk[i] = keys[i]; 
+    }
+
+    uint64_t cipher = encrypt(plain, rk);
+
+    EXPECT_EQ(cipher, 0xF8DD50531D973BDEULL);
+}
+
+TEST(PRESENT128, OfficialVector) {
+    uint64_t plain = 0x0123456789ABCDEFULL;
+
+    bitset<128> key;
+    string key_hex = "00112233445566778899aabbccddeeff";
+
+    for (int i = 0; i < 128; i++) {
+        key[i] = (stoi(key_hex.substr(31 - i / 4, 1), nullptr, 16) >> (i % 4)) & 1;
+    }
+
+    auto keys = generateRoundKeys128(key);
+
+    uint64_t rk[32];
+    for (int i = 0; i < 32; i++) { 
+        rk[i] = keys[i]; 
+    }
+
+    uint64_t cipher = encrypt(plain, rk);
+
+    EXPECT_EQ(cipher, 0x88728500054418DEULL);
+}
+
+
 TEST(PRESENT80, EncryptZero80) {
     uint64_t plaintext = 0x0000000000000000ULL;
     bitset<80> key;
@@ -130,3 +175,4 @@ TEST(PRESENT80, DifferentKeys) {
 
     EXPECT_NE(c1, c2);
 }
+
