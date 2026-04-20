@@ -8,13 +8,8 @@ int main() {
         cout << " PRESENT Cipher \n";
         cout << "1 - Encrypt file\n";
         cout << "2 - Decrypt file\n";
-        cout << "0 - Exit\n";
         cout << "Choice: ";
         cin >> choice;
-
-        if (choice == 0) { 
-            return 0; 
-        }
 
         string inputFile, outputFile, keyFile;
 
